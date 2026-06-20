@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><title>Invoice {{ $order->order_number }}</title>
+<style>
+body{font-family:DejaVu Sans, sans-serif;font-size:12px;color:#222} .header{display:flex;justify-content:space-between;border-bottom:2px solid #222;padding-bottom:12px;margin-bottom:20px}.brand{font-size:26px;font-weight:bold;color:#0d6efd}.box{border:1px solid #ddd;padding:12px;margin-bottom:14px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #ddd;padding:8px;text-align:left}th{background:#f2f2f2}.right{text-align:right}.muted{color:#666}.total{font-size:16px;font-weight:bold}</style>
+</head><body>
+<div class="header"><div><div class="brand">Nextronix</div><div class="muted">Nextronixnics Store</div></div><div class="right"><h2>INVOICE</h2><div>{{ $order->order_number }}</div><div>{{ $order->created_at->format('d M Y') }}</div></div></div>
+<div class="box"><strong>Tagihan kepada:</strong><br>{{ $order->name }}<br>{{ $order->email }} | {{ $order->phone }}<br>{{ $order->address }}, {{ $order->city }} {{ $order->postal_code }}<br>@if($order->destination_label)Destination: {{ $order->destination_label }}<br>@endif @if($order->courier_code)Kurir: {{ strtoupper($order->courier_code) }} {{ $order->courier_service }} {{ $order->courier_etd }}@endif</div>
+<table><thead><tr><th>Produk</th><th class="right">Qty</th><th class="right">Harga</th><th class="right">Subtotal</th></tr></thead><tbody>@foreach($order->items as $item)<tr><td>{{ $item->product_name }}</td><td class="right">{{ $item->quantity }}</td><td class="right">Rp {{ number_format((float)$item->price,0,',','.') }}</td><td class="right">Rp {{ number_format((float)$item->subtotal,0,',','.') }}</td></tr>@endforeach</tbody></table>
+<table style="margin-top:14px"><tr><td class="right">Subtotal</td><td class="right">Rp {{ number_format((float)$order->subtotal,0,',','.') }}</td></tr><tr><td class="right">Ongkir</td><td class="right">Rp {{ number_format((float)$order->shipping_cost,0,',','.') }}</td></tr><tr><td class="right total">Total</td><td class="right total">Rp {{ number_format((float)$order->total,0,',','.') }}</td></tr></table>
+<p>Status order: <strong>{{ ucfirst($order->status) }}</strong> | Status pembayaran: <strong>{{ ucfirst(str_replace('_',' ',$order->payment_status)) }}</strong></p>
+</body></html>
